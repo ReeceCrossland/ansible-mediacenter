@@ -17,7 +17,7 @@
     tautulli_domain: "tautulli.{{ base_domain }}"
     transmission_domain: "transmission.{{ base_domain }}"
   roles:
-    - media-ansible/roles/common
-    - media-ansible/roles/systemd
-    - media-ansible/roles/packages
-    - media-ansible/roles/webservices
+    - ansible-mediacenter/roles/common
+    - ansible-mediacenter/roles/systemd
+    - ansible-mediacenter/roles/packages
+    - ansible-mediacenter/roles/webservices
