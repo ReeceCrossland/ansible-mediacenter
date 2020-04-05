@@ -25,4 +25,4 @@ It seems to work well for me on CentOS 7 ¯\\\_(ツ)\_/¯
 Testing requires Molecule V2.* for now due to linting changes on 3.* and I'm too lazy to update
 
 # CI Status
-![Media-Ansible Molecule Tests](https://github.com/ReeceCrossland/media-ansible/workflows/Media-Ansible%20Molecule%20Tests/badge.svg?branch=master)
+![Media-Ansible Molecule Tests](https://github.com/ReeceCrossland/ansible-mediacenter/workflows/Media-Ansible%20Molecule%20Tests/badge.svg?branch=master)
