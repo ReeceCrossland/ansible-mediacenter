@@ -1,0 +1,6 @@
+---
+
+- name: mediacenter-playbook
+  hosts: all
+  roles:
+    - healthcheck

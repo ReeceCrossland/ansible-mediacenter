@@ -1,0 +1,116 @@
+---
+- name: Create nginx default configuration
+  template:
+    src: default.cfg
+    dest: /etc/nginx/conf.d/default.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: generate diffie-hellman
+  command: "openssl dhparam -out /etc/nginx/ssl-dhparams.pem 1024"
+  when: test
+  args:
+    creates: "/etc/nginx/ssl-dhparams.pem"
+
+- name: generate diffie-hellman
+  command: "openssl dhparam -out /etc/nginx/ssl-dhparams.pem 4096"
+  when: not test
+  args:
+    creates: "/etc/nginx/ssl-dhparams.pem"
+
+- name: Create dir for ssls
+  file:
+    path: "/etc/letsencrypt/live/{{ item.value.domain_name }}/"
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: 0755
+  with_dict: "{{ webservices }}"
+
+- name: Create dir for ssls
+  file:
+    path: "/etc/letsencrypt/live/{{ item.value.domain_name }}/"
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: 0755
+  with_dict: "{{ webservices_protected }}"
+
+- name: generate ssl placeholder
+  command: >
+    openssl req -x509 -nodes -days 365 -subj
+    "/C=UK/ST=Lancashire/L=MCR/O=Mediainc/CN=placeholder.com"
+    -newkey rsa:4096 -sha256 -keyout /etc/nginx/placeholder.key
+    -out /etc/nginx/placeholder.pem
+  when: test
+  args:
+    creates: "/etc/nginx/placeholder.key"
+
+- name: Create validation root for letsencrypt
+  file:
+    path: "/var/{{ item.value.domain_name }}/ssl"
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: 0755
+  with_dict: "{{ webservices }}"
+
+- name: Create validation root for letsencrypt
+  file:
+    path: "/var/{{ item.value.domain_name }}/ssl"
+    state: directory
+    recurse: true
+    owner: root
+    group: root
+    mode: 0755
+  with_dict: "{{ webservices_protected }}"
+
+- name: Create/Manage http auth include file
+  htpasswd:
+    path: /etc/nginx/htpasswd
+    name: chodeboy
+    password: "{{ httpauth_pass }}"
+    owner: root
+    group: root
+    mode: 0444
+  notify: restart nginx
+
+- name: Create/Manage realip configuration include
+  template:
+    src: realip.inc
+    dest: /etc/nginx/realip.inc
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create/Manage password protection configuration include file
+  template:
+    src: httpauth.inc
+    dest: /etc/nginx/httpauth.inc
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Create/Manage custom Nginx configurations
+  template:
+    src: config.cfg.j2
+    dest: "/etc/nginx/conf.d/{{ item.value.domain_name }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ webservices }}"
+  notify: restart nginx
+
+- name: Create/Manage custom Nginx configurations
+  template:
+    src: httpauth_config.cfg.j2
+    dest: "/etc/nginx/conf.d/{{ item.value.domain_name }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ webservices_protected }}"
+  notify: restart nginx

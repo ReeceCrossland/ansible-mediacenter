@@ -1,0 +1,42 @@
+---
+systemd:
+  ombi:
+    service_name: ombi
+    user_name: ombi
+    working_dir: /opt/Ombi/
+    exec_start: /opt/Ombi/Ombi
+    home_dir: /home/ombi
+    type: simple
+  sabnzbd:
+    service_name: sabnzbd
+    user_name: usenet
+    working_dir: /opt/sabnzbd/
+    exec_start: >
+      /usr/bin/python /opt/sabnzbd/SABnzbd.py --daemon
+      --config-file=/opt/sabnzbd/sabnzbd_config.ini -s 0.0.0.0
+    home_dir: /home/sabnzbd
+    type: forking
+  radarr:
+    service_name: radarr
+    user_name: radarr
+    working_dir: /opt/Radarr/
+    exec_start: /usr/bin/mono --debug /opt/Radarr/Radarr.exe -nobrowser
+    home_dir: /home/radarr
+    type: simple
+  sonarr:
+    service_name: sonarr
+    user_name: sonarr
+    working_dir: /opt/sonarr/
+    exec_start:
+      - /usr/bin/mono /opt/sonarr/bin/NzbDrone.exe -nobrowser -data /opt/sonarr
+    home_dir: /home/sonarr
+    type: simple
+  tautulli:
+    service_name: tautulli
+    user_name: tautulli
+    working_dir: /opt/Tautulli/
+    exec_start: >
+      /opt/Tautulli/Tautulli.py --config /opt/Tautulli/config.ini
+      --datadir /opt/Tautulli --quiet --daemon --nolaunch
+    home_dir: /home/tautulli
+    type: forking

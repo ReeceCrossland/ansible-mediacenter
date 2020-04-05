@@ -1,0 +1,30 @@
+---
+name: Media-Ansible Molecule Tests
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get install python3 python-dev python3-dev \
+          build-essential libssl-dev libffi-dev \
+          libxml2-dev libxslt1-dev zlib1g-dev \
+          python3-pip
+          python3 -m pip install --upgrade pip
+          python3 -m pip install 'molecule==2.*' \
+          molecule[docker] ansible docker
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Test with molecule
+        run: |
+          molecule test --all

@@ -1,0 +1,48 @@
+---
+- name: Check Plex service is up and running
+  systemd:
+    name: plexmediaserver
+    enabled: true
+    state: started
+
+- name: Check Sabnzbd service is enabled and running
+  systemd:
+    name: sabnzbd
+    enabled: true
+    state: started
+
+- name: Check Radarr service is enabled and running
+  systemd:
+    name: radarr
+    enabled: true
+    state: started
+
+- name: Check Sonarr service is enabled and running
+  systemd:
+    name: sonarr
+    enabled: true
+    state: started
+
+- name: Check Tautulli service is enabled and running
+  systemd:
+    name: tautulli
+    enabled: true
+    state: started
+
+- name: Check Ombi service is enabled and running
+  systemd:
+    name: ombi
+    enabled: true
+    state: started
+
+- name: Check Nginx service is enabled and running
+  systemd:
+    name: nginx
+    enabled: true
+    state: started
+
+- name: Check cron daemon is running
+  systemd:
+    name: crond
+    enabled: true
+    state: started

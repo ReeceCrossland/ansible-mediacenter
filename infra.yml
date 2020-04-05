@@ -1,0 +1,16 @@
+---
+
+- name: mediacenter-playbook
+  hosts: all
+  roles:
+    - common
+    - systemd
+    - packages
+    - webservices
+  vars:
+    httpauth_pass: XXXXXXXXXX
+    plex_url: https://XXX.XXX.XXX
+    plex_token: XXXXXXXXXX
+    movie_library_id: 69
+    no_ssl: false  # No SSL yet?  Set this to 'true', it'll generate a placeholder and Nginx should be able to start
+    base_domain: exampledomain.org

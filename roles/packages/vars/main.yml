@@ -1,0 +1,53 @@
+---
+packages:
+  tautulli:
+    service_name: tautulli
+    repo_url: https://github.com/Tautulli/Tautulli.git
+    user_name: tautulli
+    working_dir: /opt/tautulli/
+  sabnzbd:
+    service_name: sabnzbd
+    repo_url: https://github.com/sabnzbd/sabnzbd.git
+    user_name: usenet
+    working_dir: /opt/sabnzbd/
+
+tar_without_dir:
+  ombi:
+    service_name: ombi
+    repo_url: https://github.com/tidusjar/Ombi/releases/download/v3.0.4892/linux.tar.gz
+    user_name: ombi
+    working_dir: /opt/ombi/
+    tmp_dir: /opt/ombi/
+
+tar_with_dir:
+  radarr:
+    service_name: radarr
+    repo_url: https://github.com/Radarr/Radarr/releases/download/v0.2.0.1480/Radarr.develop.0.2.0.1480.linux.tar.gz
+    user_name: radarr
+    working_dir: /opt/radarr/
+    tmp_dir: /tmp/radarr/
+    dir_name: Radarr/
+  sonarr:
+    service_name: sonarr
+    repo_url: https://github.com/Sonarr/Sonarr/archive/v2.0.0.5322.tar.gz
+    user_name: sonarr
+    working_dir: /opt/sonarr/
+    tmp_dir: /tmp/sonarr/
+    dir_name: Sonarr-2.0.0.5322/
+  nzbdrone:
+    service_name: nzbdrone
+    repo_url: https://update.sonarr.tv/v2/master/mono/NzbDrone.master.tar.gz
+    user_name: root
+    working_dir: /opt/nzbdrone/
+    tmp_dir: /opt/nzbdrone/
+    dir_name: NzbDrone/
+
+symlink:
+  radarr:
+    user_name: radarr
+    working_dir: /opt/radarr/
+    dir_name: Radarr/
+  sonarr:
+    user_name: sonarr
+    working_dir: /opt/sonarr/
+    dir_name: Sonarr-2.0.0.5322/

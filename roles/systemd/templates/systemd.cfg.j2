@@ -1,0 +1,18 @@
+[Unit]
+Description={{ item.value.service_name }}
+After=network-online.target
+
+[Service]
+User={{ item.value.user_name }}
+Group={{ item.value.user_name }}
+WorkingDirectory={{ item.value.working_dir }}
+ExecStart={{ item.value.exec_start }}
+TimeoutStopSec=60
+Restart=on-failure
+RestartSec=30
+Restart=on-abnormal
+Type={{ item.value.type }}
+GuessMainPID=no
+
+[Install]
+WantedBy=multi-user.target

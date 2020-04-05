@@ -1,0 +1,1 @@
+echo {{ movie_library_id }} | /usr/bin/python3.6 /opt/TMDB-Collection-Data-Retriever/collection_updater.py

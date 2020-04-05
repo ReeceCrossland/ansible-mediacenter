@@ -1,0 +1,44 @@
+---
+webservices:
+  ombi:
+    domain_name: "{{ ombi_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ ombi_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ ombi_domain }}-0001/privkey.pem"
+    port_number: 5000
+  plex:
+    domain_name: "{{ plex_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ plex_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ plex_domain }}-0001/privkey.pem"
+    port_number: 32400
+
+webservices_protected:
+  chodemedia:
+    domain_name: "{{ base_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ base_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ base_domain }}-0001/privkey.pem"
+    port_number: 9999
+  sabnzbd:
+    domain_name: "{{ sabnzbd_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ sabnzbd_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ sabnzbd_domain }}-0001/privkey.pem"
+    port_number: 8080
+  radarr:
+    domain_name: "{{ radarr_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{radarr_domain}}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ radarr_domain }}-0001/privkey.pem"
+    port_number: 7878
+  sonarr:
+    domain_name: "{{ sonarr_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ sonarr_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ sonarr_domain }}-0001/privkey.pem"
+    port_number: 8989
+  tautulli:
+    domain_name: "{{ tautulli_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ tautulli_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ tautulli_domain }}-0001/privkey.pem"
+    port_number: 8181
+  transmission:
+    domain_name: "{{ transmission_domain }}"
+    pem_name: "/etc/letsencrypt/live/{{ transmission_domain }}-0001/fullchain.pem"
+    key_name: "/etc/letsencrypt/live/{{ transmission_domain }}-0001/privkey.pem"
+    port_number: 9091

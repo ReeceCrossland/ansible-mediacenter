@@ -1,0 +1,28 @@
+---
+- name: Perform systemd config creation
+  template:
+    src: systemd.cfg.j2
+    dest: "/etc/systemd/system/{{ item.value.service_name }}.service"
+  with_dict: "{{ systemd }}"
+  notify: "restart {{ item.value.service_name }}"
+
+- name: Add manually installed software users
+  user:
+    name: "{{ item.value.user_name }}"
+    shell: /bin/bash
+    home: "{{ item.value.home_dir }}"
+    append: true
+  with_dict: "{{ systemd }}"
+
+- name: reload systemd
+  systemd:
+    daemon_reload: true
+
+- name: Ensure plex has correct group access
+  user:
+    name: plex
+    append: true
+    groups:
+      - usenet
+      - radarr
+      - sonarr

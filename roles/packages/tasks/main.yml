@@ -1,0 +1,118 @@
+---
+- name: Perform git clone
+  git:
+    repo: "{{ item.value.repo_url }}"
+    dest: "{{ item.value.working_dir }}"
+    update: true
+    version: master
+  with_dict: "{{ packages }}"
+
+- name: check if tar dirs already exist
+  stat:
+    path: "{{ item.value.working_dir }}"
+  with_dict: "{{ tar_without_dir }}"
+  register: check_working_dirs
+
+- name: check if tar with dirs already exist
+  stat:
+    path: "{{ item.value.working_dir }}"
+  with_dict: "{{ tar_with_dir }}"
+  register: check_tar_with_working_dirs
+
+- name: get tars for services
+  get_url:
+    url: "{{ item.value.repo_url }}"
+    dest: "/tmp/{{ item.value.service_name }}.tar.gz"
+  with_dict: "{{ tar_without_dir }}"
+  when: check_working_dirs.isdir is not defined
+
+- name: get tars with dirs for services
+  get_url:
+    url: "{{ item.value.repo_url }}"
+    dest: "/tmp/{{ item.value.service_name }}.tar.gz"
+  with_dict: "{{ tar_with_dir }}"
+  when: check_tar_with_working_dirs.isdir is not defined
+
+- name: create dir for untar without dir
+  file:
+    path: "{{ item.value.working_dir }}"
+    state: directory
+    owner: "{{ item.value.user_name }}"
+    group: "{{ item.value.user_name }}"
+    mode: 0755
+  with_dict: "{{ tar_without_dir }}"
+  when: check_working_dirs.isdir is not defined
+
+- name: create working dirs
+  file:
+    path: "{{ item.value.working_dir }}"
+    state: directory
+    owner: "{{ item.value.user_name }}"
+    group: "{{ item.value.user_name }}"
+    mode: 0755
+  with_dict: "{{ tar_with_dir }}"
+  when: check_tar_with_working_dirs.isdir is not defined
+
+- name: untar some tarbomb
+  unarchive:
+    src: "/tmp/{{ item.value.service_name }}.tar.gz"
+    dest: "{{ item.value.working_dir }}"
+    owner: "{{ item.value.user_name }}"
+    group: "{{ item.value.user_name }}"
+    mode: 0755
+    remote_src: true
+  with_dict: "{{ tar_without_dir }}"
+  when: check_working_dirs.isdir is not defined
+
+- name: unarchive sonarr and radarr unrar
+  unarchive:
+    src: "/tmp/{{ item.value.service_name }}.tar.gz"
+    dest: "{{ item.value.working_dir }}"
+    owner: "{{ item.value.user_name }}"
+    group: "{{ item.value.user_name }}"
+    remote_src: true
+    extra_opts:
+      - --strip=1
+      - --wildcards
+      - "{{ item.value.dir_name }}*"
+  with_dict: "{{ tar_with_dir }}"
+
+- name: create symlinks for nzbdrone stuff
+  file:
+    src: /opt/nzbdrone/
+    path: "{{ item.value.working_dir }}/bin"
+    owner: root
+    group: root
+    mode: 0755
+    state: link
+  with_dict: "{{ symlink }}"
+
+- name: Fix permissions
+  file:
+    path: "{{ item.value.working_dir }}"
+    owner: "{{ item.value.user_name }}"
+    group: "{{ item.value.user_name }}"
+  with_dict: "{{ packages }}"
+
+- name: Create collection updater config
+  git:
+    repo: https://github.com/defract/TMDB-Collection-Data-Retriever.git
+    dest: /opt/TMDB-Collection-Data-Retriever/
+    update: false
+    version: master
+
+- name: Update settings.ini with actual plex info
+  template:
+    src: settings.cfg.j2
+    dest: /opt/TMDB-Collection-Data-Retriever/settings.ini
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add a cron to automate collection updater
+  template:
+    src: collection.cron
+    dest: /etc/cron.weekly.collection
+    owner: root
+    group: root
+    mode: 0644

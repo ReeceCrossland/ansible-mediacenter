@@ -1,0 +1,124 @@
+---
+- name: Add PlexRepo
+  yum_repository:
+    name: plexrepo
+    description: PlexMediaServer public repository
+    baseurl: https://downloads.plex.tv/repo/rpm/$basearch/
+    gpgkey: https://downloads.plex.tv/plex-keys/PlexSign.key
+    gpgcheck: true
+    enabled: true
+
+- name: Install/Update EPEL
+  yum:
+    name: epel-release
+    state: present
+
+- name: Add MonoRepo
+  yum_repository:
+    name: monorepo
+    description: mono used for .net implementations
+    baseurl: https://download.mono-project.com/repo/centos7-stable/
+    gpgkey: https://download.mono-project.com/repo/xamarin.gpg
+    gpgcheck: true
+    enabled: true
+
+- name: Configure nginx repository
+  yum_repository:
+    name: nginx
+    description: Official Nginx Repository
+    baseurl: http://nginx.org/packages/centos/$releasever/$basearch/
+    gpgcheck: false
+    enabled: true
+
+- name: Install/Update nginx
+  yum:
+    name: nginx
+    state: present
+    update_cache: true
+  notify: restart nginx
+
+- name: Install/Update Plex
+  yum:
+    name: plexmediaserver
+    state: present
+    update_cache: true
+  notify: restart plex
+
+- name: add ssl configuration
+  template:
+    src: options-ssl-nginx.conf
+    dest: /etc/nginx/options-ssl-nginx.conf
+    group: root
+    owner: root
+    mode: '0644'
+
+- name: Install pre-requisites
+  yum:
+    name:
+      - curl
+      - gcc
+      - gettext
+      - git
+      - libmediainfo
+      - libxslt-devel
+      - libzen
+      - mediainfo
+      - mono-core
+      - mono-devel
+      - mono-locale-extras
+      - p7zip
+      - par2cmdline
+      - python-cheetah
+      - python-configobj
+      - python-dbus
+      - python-devel
+      - python-feedparser
+      - sqlite.x86_64
+      - tar
+      - unzip
+      - wget
+      - yum-utils
+      - httpd-tools
+      - python-passlib
+      - yum-utils
+      - python2-certbot-nginx
+      - certbot
+      - python3
+      - icu
+      - libunwind
+      - openssl-devel
+    state: present
+
+- name: install pip
+  easy_install:
+    name: pip
+    state: present
+
+- name: pip packages
+  pip:
+    name:
+      - sabyenc3
+      - passlib
+      - requests
+      - plexapi
+      - progress
+      - virtualenv
+    executable: /usr/bin/pip3
+
+- name: unrar binary
+  get_url:
+    url: https://www.rarlab.com/rar/rarlinux-x64-5.6.0.tar.gz
+    dest: /tmp/rar.tar.gz
+
+- name: unarchive unrar
+  unarchive:
+    src: /tmp/rar.tar.gz
+    dest: /usr/bin/
+    owner: root
+    group: root
+    mode: 0111
+    remote_src: true
+    extra_opts:
+      - --strip=1
+      - --wildcards
+      - '*/unrar'

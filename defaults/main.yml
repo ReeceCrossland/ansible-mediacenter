@@ -1,0 +1,10 @@
+---
+test: false
+base_domain: exampledomain.org
+ombi_domain: "ombi.{{ base_domain }}"
+plex_domain: "plex.{{ base_domain }}"
+sabnzbd_domain: "sabnzbd.{{ base_domain }}"
+radarr_domain: "radarr.{{ base_domain }}"
+sonarr_domain: "sonarr.{{ base_domain }}"
+tautulli_domain: "tautulli.{{ base_domain }}"
+transmission_domain: "transmission.{{ base_domain }}"
