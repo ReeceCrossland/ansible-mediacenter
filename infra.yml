@@ -8,6 +8,7 @@
     - packages
     - webservices
   vars:
+    httpauth_user: username
     httpauth_pass: XXXXXXXXXX
     plex_url: https://XXX.XXX.XXX
     plex_token: XXXXXXXXXX

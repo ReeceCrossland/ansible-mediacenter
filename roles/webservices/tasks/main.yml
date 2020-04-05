@@ -72,7 +72,7 @@
 - name: Create/Manage http auth include file
   htpasswd:
     path: /etc/nginx/htpasswd
-    name: chodeboy
+    name: "{{ httpauth_user }}"
     password: "{{ httpauth_pass }}"
     owner: root
     group: root

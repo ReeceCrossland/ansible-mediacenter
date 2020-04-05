@@ -2,6 +2,7 @@
 - name: Converge
   hosts: all
   vars:
+    httpauth_user: bane2020
     httpauth_pass: Password123
     plex_url: https://plex.acme.corp
     plex_token: gibberishtoken

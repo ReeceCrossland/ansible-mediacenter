@@ -1,5 +1,6 @@
 ---
 test: false
+httpauth_user: admin
 base_domain: exampledomain.org
 ombi_domain: "ombi.{{ base_domain }}"
 plex_domain: "plex.{{ base_domain }}"
